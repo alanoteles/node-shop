@@ -6,7 +6,7 @@ const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const bodyParser = require('body-parser');
 const errorController = require('./controllers/error');
-const db = require('./utils/database');
+const sequelize = require('./utils/database');
 
 const app = express();
 
@@ -24,4 +24,10 @@ app.use(errorController.get404Page);
 app.use((req, res, next) => {
   console.log("Middleware called...");
 })
-app.listen(3000);
+
+sequelize.sync().then(result => {
+  console.log('Sync Ok');
+  app.listen(3000);
+}).catch(err => {
+  console.log(err);
+});
